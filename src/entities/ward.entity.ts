@@ -1,10 +1,9 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { District } from './district.entity';
-import { Province } from './province.entity';
 
 @Entity()
 export class Ward {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -12,7 +11,4 @@ export class Ward {
 
   @ManyToOne(() => District, (district) => district.wards)
   district: District;
-
-  @ManyToOne(() => Province, (province) => province.wards)
-  province: Province;
 }

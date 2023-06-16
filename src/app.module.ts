@@ -5,6 +5,9 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { DatabaseModule } from './dataSource/database.module';
+import { ProvinceModule } from './province/province.module';
+import { DistrictModule } from './district/district.module';
+import { WardModule } from './ward/ward.module';
 
 @Module({
   imports: [
@@ -12,6 +15,9 @@ import { DatabaseModule } from './dataSource/database.module';
     DatabaseModule,
     UsersModule,
     RolesModule,
+    ProvinceModule,
+    DistrictModule,
+    WardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

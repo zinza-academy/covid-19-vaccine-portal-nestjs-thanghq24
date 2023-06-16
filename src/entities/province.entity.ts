@@ -1,10 +1,9 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { District } from './district.entity';
-import { Ward } from './ward.entity';
 
 @Entity()
 export class Province {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -12,7 +11,4 @@ export class Province {
 
   @OneToMany(() => District, (district) => district.province)
   districts: District[];
-
-  @OneToMany(() => Ward, (ward) => ward.province)
-  wards: Ward[];
 }
