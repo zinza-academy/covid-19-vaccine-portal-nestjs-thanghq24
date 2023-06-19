@@ -8,6 +8,7 @@ import { DatabaseModule } from './dataSource/database.module';
 import { ProvinceModule } from './province/province.module';
 import { DistrictModule } from './district/district.module';
 import { WardModule } from './ward/ward.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { WardModule } from './ward/ward.module';
     ProvinceModule,
     DistrictModule,
     WardModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

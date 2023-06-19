@@ -15,7 +15,7 @@ import {
 } from 'class-validator';
 import { Gender } from 'src/entities/user.entity';
 
-export class CreateUserDto {
+export class SignUpDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(50)
