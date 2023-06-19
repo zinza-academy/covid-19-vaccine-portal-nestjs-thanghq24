@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 config();
 
@@ -15,4 +16,5 @@ export default new DataSource({
   database: configService.get('DATABASE_NAME'),
   entities: ['src/entities/*.entity{.ts,.js}'],
   migrations: ['migrations/*{.ts,.js}'],
+  namingStrategy: new SnakeNamingStrategy(),
 });
