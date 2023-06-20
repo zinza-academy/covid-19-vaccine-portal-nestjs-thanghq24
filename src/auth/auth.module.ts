@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { APP_GUARD } from '@nestjs/core';
         signOptions: { expiresIn: process.env.JWT_EXPIRE_TIME },
       }),
     }),
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [

@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProvincesModule } from './provinces/provinces.module';
 import { DistrictsModule } from './districts/districts.module';
 import { WardsModule } from './wards/wards.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { WardsModule } from './wards/wards.module';
     ProvincesModule,
     DistrictsModule,
     WardsModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
