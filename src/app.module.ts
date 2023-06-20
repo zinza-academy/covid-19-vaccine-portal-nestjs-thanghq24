@@ -5,10 +5,10 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { DatabaseModule } from './dataSource/database.module';
-import { ProvinceModule } from './province/province.module';
-import { DistrictModule } from './district/district.module';
-import { WardModule } from './ward/ward.module';
 import { AuthModule } from './auth/auth.module';
+import { ProvincesModule } from './provinces/provinces.module';
+import { DistrictsModule } from './districts/districts.module';
+import { WardsModule } from './wards/wards.module';
 
 @Module({
   imports: [
@@ -16,10 +16,10 @@ import { AuthModule } from './auth/auth.module';
     DatabaseModule,
     UsersModule,
     RolesModule,
-    ProvinceModule,
-    DistrictModule,
-    WardModule,
     AuthModule,
+    ProvincesModule,
+    DistrictsModule,
+    WardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
