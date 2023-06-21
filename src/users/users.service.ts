@@ -38,6 +38,7 @@ export class UsersService {
 
     const createdUser = await this.userRepository.save({
       ...createUserDto,
+      province: { id: createUserDto.province },
       roles: roleIds,
     });
     return createdUser;
@@ -48,6 +49,7 @@ export class UsersService {
       take: pageSize,
       skip: pageSize * page,
       relations: { roles: true },
+      loadRelationIds: true,
     });
     return users;
   }
@@ -56,8 +58,19 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: { id: id },
       relations: { roles: true },
+      loadRelationIds: true,
     });
     if (!user) throw new NotFoundException('User not found!');
+    return user;
+  }
+
+  async findByEmail(email: string) {
+    const user = await this.userRepository.findOne({
+      where: { email: email },
+      relations: { roles: true },
+      loadRelationIds: true,
+    });
+    if (!user) throw new NotFoundException(`User with given email not found!`);
     return user;
   }
 
@@ -84,9 +97,20 @@ export class UsersService {
     const toUpdateUser = {
       id: updateUser.id,
       ...updateUserDto,
+      province: { id: updateUserDto.province },
       roles: roleIds,
     };
     const updatedUser = await this.userRepository.save(toUpdateUser);
+    return updatedUser;
+  }
+
+  async updatePassword(id: number, newPassword: string) {
+    const updateUser = await this.findOne(id);
+    if (!updateUser) throw new NotFoundException('User not found!');
+
+    updateUser.password = newPassword;
+
+    const updatedUser = await this.userRepository.save(updateUser);
     return updatedUser;
   }
 

@@ -68,16 +68,6 @@ export class DivisionReaderService {
       });
     });
 
-    // console.log(wards.filter((w) => w.id === 0));
-    // 5 wards without data (has districtId but its own data)
-    // [
-    //   { id: 0, name: 'Xã X', districtId: 318 },
-    //   { id: 0, name: 'Xã X', districtId: 471 },
-    //   { id: 0, name: 'Xã X', districtId: 498 },
-    //   { id: 0, name: 'Xã X', districtId: 536 },
-    //   { id: 0, name: 'Xã X', districtId: 755 },
-    // ];
-    //filter out invalid wards
     wards = wards.filter((w) => w.id !== 0);
 
     await DataSource.initialize();
