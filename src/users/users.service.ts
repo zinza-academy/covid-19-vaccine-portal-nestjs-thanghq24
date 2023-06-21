@@ -104,6 +104,16 @@ export class UsersService {
     return updatedUser;
   }
 
+  async updatePassword(id: number, newPassword: string) {
+    const updateUser = await this.findOne(id);
+    if (!updateUser) throw new NotFoundException('User not found!');
+
+    updateUser.password = newPassword;
+
+    const updatedUser = await this.userRepository.save(updateUser);
+    return updatedUser;
+  }
+
   async remove(id: number) {
     const deleteUser = await this.findOne(id);
     if (!deleteUser) throw new NotFoundException('User not found!');
