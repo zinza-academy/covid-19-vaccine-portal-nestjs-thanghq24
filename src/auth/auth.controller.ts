@@ -34,21 +34,22 @@ export class AuthController {
     res.cookie('access_token', '', {
       maxAge: 0,
     });
-    return 'ok';
+    return { message: 'ok' };
   }
 
   @Public()
   @Post('sign-up')
   async signUp(@Body() signUpDto: SignUpDto) {
+    signUpDto.roles = [3];
     await this.authService.signUp(signUpDto);
-    return 'ok';
+    return { message: 'ok' };
   }
 
   @Public()
   @Post('forgot-password')
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
-    await this.authService.forgotPassword(forgotPasswordDto);
-    return 'ok';
+    const token = await this.authService.forgotPassword(forgotPasswordDto);
+    return { token: token };
   }
 
   @Public()
@@ -58,6 +59,6 @@ export class AuthController {
     @Param('token') token: string,
   ) {
     await this.authService.changePassword(changePasswordDto, token);
-    return 'ok';
+    return { message: 'ok' };
   }
 }
