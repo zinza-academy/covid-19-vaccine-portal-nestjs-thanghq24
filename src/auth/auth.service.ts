@@ -11,7 +11,6 @@ import { SignUpDto } from './dto/signUp.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { MailService } from 'src/mail/mail.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { decode } from 'punycode';
 
 @Injectable()
 export class AuthService {
