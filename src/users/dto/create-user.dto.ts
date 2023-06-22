@@ -53,14 +53,6 @@ export class CreateUserDto {
 
   @IsNumber()
   @IsNotEmpty()
-  province: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  district: number;
-
-  @IsNumber()
-  @IsNotEmpty()
   ward: number;
 
   @IsArray()

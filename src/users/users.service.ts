@@ -38,7 +38,7 @@ export class UsersService {
 
     const createdUser = await this.userRepository.save({
       ...createUserDto,
-      province: { id: createUserDto.province },
+      ward: { id: createUserDto.ward },
       roles: roleIds,
     });
     return createdUser;
@@ -48,8 +48,7 @@ export class UsersService {
     const users = this.userRepository.find({
       take: pageSize,
       skip: pageSize * page,
-      relations: { roles: true },
-      loadRelationIds: true,
+      relations: { roles: true, ward: { district: { province: true } } },
     });
     return users;
   }
@@ -57,8 +56,7 @@ export class UsersService {
   async findOne(id: number) {
     const user = await this.userRepository.findOne({
       where: { id: id },
-      relations: { roles: true },
-      loadRelationIds: true,
+      relations: { roles: true, ward: { district: { province: true } } },
     });
     if (!user) throw new NotFoundException('User not found!');
     return user;
@@ -67,9 +65,9 @@ export class UsersService {
   async findByEmail(email: string) {
     const user = await this.userRepository.findOne({
       where: { email: email },
-      relations: { roles: true },
-      loadRelationIds: true,
+      relations: { roles: true, ward: { district: { province: true } } },
     });
+
     if (!user) throw new NotFoundException(`User with given email not found!`);
     return user;
   }
@@ -97,7 +95,7 @@ export class UsersService {
     const toUpdateUser = {
       id: updateUser.id,
       ...updateUserDto,
-      province: { id: updateUserDto.province },
+      ward: { id: updateUserDto.ward },
       roles: roleIds,
     };
     const updatedUser = await this.userRepository.save(toUpdateUser);
