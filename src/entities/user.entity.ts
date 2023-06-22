@@ -9,8 +9,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Role } from './role.entity';
-import { Province } from './province.entity';
-import { District } from './district.entity';
 import { Ward } from './ward.entity';
 import { Exclude, instanceToPlain } from 'class-transformer';
 
@@ -55,17 +53,9 @@ export class User {
   @Column('bigint')
   citizenIdentification: number;
 
-  @ManyToOne(() => Province)
-  @JoinColumn([{ name: 'province_id', referencedColumnName: 'id' }])
-  province: Province;
-
-  @ManyToOne(() => District)
-  @JoinColumn([{ name: 'district_id', referencedColumnName: 'id' }])
-  district: number;
-
-  @ManyToOne(() => Ward)
+  @ManyToOne(() => Ward, (ward) => ward.users)
   @JoinColumn([{ name: 'ward_id', referencedColumnName: 'id' }])
-  ward: number;
+  ward: Ward;
 
   @ManyToMany(() => Role)
   @JoinTable({
@@ -78,7 +68,6 @@ export class User {
   }
 
   validatePassword(password: string) {
-    // if (!!this.password || !!User.salt) return false;
     return bcrypt.compare(password, this.password);
   }
 }
