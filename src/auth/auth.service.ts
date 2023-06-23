@@ -31,8 +31,6 @@ export class AuthService {
     formattedUser.district = user.ward.district.id;
     formattedUser.province = user.ward.district.province.id;
 
-    console.log(formattedUser.roles);
-
     const payload = {
       id: user.id,
       fullName: formattedUser.fullName,
