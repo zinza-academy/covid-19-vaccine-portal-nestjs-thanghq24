@@ -10,6 +10,7 @@ import { ProvincesModule } from './provinces/provinces.module';
 import { DistrictsModule } from './districts/districts.module';
 import { WardsModule } from './wards/wards.module';
 import { MailModule } from './mail/mail.module';
+import { VaccinationSitesModule } from './vaccination-sites/vaccination-sites.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MailModule } from './mail/mail.module';
     DistrictsModule,
     WardsModule,
     MailModule,
+    VaccinationSitesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
