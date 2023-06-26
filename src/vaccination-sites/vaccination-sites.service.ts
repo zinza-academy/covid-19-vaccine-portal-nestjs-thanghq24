@@ -4,7 +4,10 @@ import { UpdateVaccinationSiteDto } from './dto/update-vaccination-site.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VaccinationSite } from 'src/entities/vaccination-site.entity';
 import { Like, Repository } from 'typeorm';
+<<<<<<< HEAD
 import { FindVaccinationDto } from './dto/find-vaccination-site.dto';
+=======
+>>>>>>> fix: fix vax sites findAll
 
 @Injectable()
 export class VaccinationSitesService {
@@ -26,10 +29,23 @@ export class VaccinationSitesService {
     return this.findOne(createdVaccinationSite.id);
   }
 
+<<<<<<< HEAD
   findAll(findQuery: FindVaccinationDto) {
     const { page, pageSize, ward, district, province, name, address } =
       findQuery;
 
+=======
+  findAll(
+    page: number,
+    pageSize: number,
+    ward: number,
+    district: number,
+    province: number,
+    name: string,
+    address: string,
+  ) {
+    console.log(page, pageSize, ward, district, province, name, address);
+>>>>>>> fix: fix vax sites findAll
     return this.vaccinationSiteRepository.findAndCount({
       take: pageSize,
       skip: page * pageSize,
