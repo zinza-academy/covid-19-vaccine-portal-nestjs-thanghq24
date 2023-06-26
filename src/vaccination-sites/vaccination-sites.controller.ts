@@ -19,7 +19,7 @@ import {
   AllowedRoles,
   ROLES,
 } from 'src/auth/decorator/allowed-roles.decorator';
-import { PaginationInterceptor } from 'src/intercepter/pagination.intercepter';
+import { PaginationInterceptor } from 'src/interceptor/pagination.interceptor';
 
 @Controller('vaccination-sites')
 export class VaccinationSitesController {
