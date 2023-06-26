@@ -3,7 +3,7 @@ import { CreateVaccinationSiteDto } from './dto/create-vaccination-site.dto';
 import { UpdateVaccinationSiteDto } from './dto/update-vaccination-site.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VaccinationSite } from 'src/entities/vaccination-site.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class VaccinationSitesService {
@@ -21,15 +21,42 @@ export class VaccinationSitesService {
     return this.vaccinationSiteRepository.save(vaccinationSite);
   }
 
-  findAll(page: number, pageSize: number) {
+  findAll(
+    page: number,
+    pageSize: number,
+    ward: number,
+    district: number,
+    province: number,
+    name: string,
+    address: string,
+  ) {
+    console.log(page, pageSize, ward, district, province, name, address);
     return this.vaccinationSiteRepository.findAndCount({
       take: pageSize,
       skip: page * pageSize,
+      relations: {
+        ward: {
+          district: {
+            province: true,
+          },
+        },
+      },
+      where: {
+        name: name ? Like(`%${name}%`) : null,
+        address: address ? Like(`%${address}%`) : null,
+        ward: {
+          id: ward ? ward : null,
+          district: {
+            id: district ? district : null,
+            provinceId: province ? province : null,
+          },
+        },
+      },
     });
   }
 
   async findOne(id: number) {
-    const vaccinationSite = await this.vaccinationSiteRepository.find({
+    const vaccinationSite = await this.vaccinationSiteRepository.findOne({
       where: { id: id },
     });
 
