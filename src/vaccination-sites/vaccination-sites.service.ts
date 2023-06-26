@@ -30,7 +30,6 @@ export class VaccinationSitesService {
     name: string,
     address: string,
   ) {
-    console.log(page, pageSize, ward, district, province, name, address);
     return this.vaccinationSiteRepository.findAndCount({
       take: pageSize,
       skip: page * pageSize,
@@ -58,6 +57,13 @@ export class VaccinationSitesService {
   async findOne(id: number) {
     const vaccinationSite = await this.vaccinationSiteRepository.findOne({
       where: { id: id },
+      relations: {
+        ward: {
+          district: {
+            province: true,
+          },
+        },
+      },
     });
 
     if (!vaccinationSite)
