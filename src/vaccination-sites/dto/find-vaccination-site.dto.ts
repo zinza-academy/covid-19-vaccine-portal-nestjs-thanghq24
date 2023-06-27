@@ -1,37 +1,38 @@
-import { Transform } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { toNumber } from 'src/utils/transformer';
 
 export class FindVaccinationDto {
-  @Transform((page) => toNumber(page))
+  @Type(() => Number)
   @IsNumber()
   @IsNotEmpty()
   page: number;
 
-  @Transform((pageSize) => toNumber(pageSize))
+  @Type(() => Number)
   @IsNumber()
   @IsNotEmpty()
   pageSize: number;
 
-  @Transform((ward) => toNumber(ward))
+  @Type(() => Number)
   @IsNumber()
   @IsOptional()
   ward: number = null;
 
-  @Transform((district) => toNumber(district))
+  @Type(() => Number)
   @IsNumber()
   @IsOptional()
   district: number = null;
 
-  @Transform((province) => toNumber(province))
+  @Type(() => Number)
   @IsNumber()
   @IsOptional()
   province: number = null;
 
+  @Type(() => String)
   @IsString()
   @IsOptional()
   name: string = null;
 
+  @Type(() => String)
   @IsString()
   @IsOptional()
   address: string = null;
