@@ -4,6 +4,7 @@ import { UpdateVaccinationSiteDto } from './dto/update-vaccination-site.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VaccinationSite } from 'src/entities/vaccination-site.entity';
 import { Like, Repository } from 'typeorm';
+import { FindVaccinationDto } from './dto/find-vaccination-site.dto';
 
 @Injectable()
 export class VaccinationSitesService {
@@ -21,15 +22,10 @@ export class VaccinationSitesService {
     return this.vaccinationSiteRepository.save(vaccinationSite);
   }
 
-  findAll(
-    page: number,
-    pageSize: number,
-    ward: number,
-    district: number,
-    province: number,
-    name: string,
-    address: string,
-  ) {
+  findAll(findQuery: FindVaccinationDto) {
+    const { page, pageSize, ward, district, province, name, address } =
+      findQuery;
+
     return this.vaccinationSiteRepository.findAndCount({
       take: pageSize,
       skip: page * pageSize,

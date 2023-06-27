@@ -7,8 +7,6 @@ import {
   Param,
   Delete,
   Query,
-  ParseIntPipe,
-  DefaultValuePipe,
   UseInterceptors,
 } from '@nestjs/common';
 import { VaccinationSitesService } from './vaccination-sites.service';
@@ -20,6 +18,7 @@ import {
   ROLES,
 } from 'src/auth/decorator/allowed-roles.decorator';
 import { PaginationInterceptor } from 'src/interceptor/pagination.interceptor';
+import { FindVaccinationDto } from './dto/find-vaccination-site.dto';
 
 @Controller('vaccination-sites')
 export class VaccinationSitesController {
@@ -36,27 +35,8 @@ export class VaccinationSitesController {
   @UseInterceptors(PaginationInterceptor)
   @Public()
   @Get()
-  findAll(
-    @Query('page', ParseIntPipe) page: number,
-    @Query('pageSize', ParseIntPipe) pageSize: number,
-    @Query('ward', new DefaultValuePipe(null))
-    ward: number,
-    @Query('district', new DefaultValuePipe(null))
-    district: number,
-    @Query('province', new DefaultValuePipe(null))
-    province: number,
-    @Query('name', new DefaultValuePipe(null)) name: string,
-    @Query('address', new DefaultValuePipe(null)) address: string,
-  ) {
-    return this.vaccinationSitesService.findAll(
-      page,
-      pageSize,
-      ward,
-      district,
-      province,
-      name,
-      address,
-    );
+  findAll(@Query() findQuery: FindVaccinationDto) {
+    return this.vaccinationSitesService.findAll(findQuery);
   }
 
   @Public()
