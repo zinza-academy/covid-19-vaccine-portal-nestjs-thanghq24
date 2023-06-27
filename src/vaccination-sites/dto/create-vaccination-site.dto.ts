@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsString, MaxLength } from 'class-validator';
 
 export class CreateVaccinationSiteDto {
@@ -11,6 +12,7 @@ export class CreateVaccinationSiteDto {
   @MaxLength(255)
   address: string;
 
+  @Type(() => Number)
   @IsNumber()
   @IsNotEmpty()
   ward: number;
@@ -20,6 +22,7 @@ export class CreateVaccinationSiteDto {
   @MaxLength(255)
   manager: string;
 
+  @Type(() => Number)
   @IsNumber()
   @IsNotEmpty()
   tableNumber: number;
