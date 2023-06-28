@@ -26,9 +26,18 @@ export class AuthService {
     const correctPassword = await user.validatePassword(loginDto.password);
     if (!correctPassword) throw new UnauthorizedException();
 
-    const payload = { id: user.id, fullName: user.fullName, roles: user.roles };
+    const formattedUser = user.toJSON();
+    formattedUser.ward = user.ward.id;
+    formattedUser.district = user.ward.district.id;
+    formattedUser.province = user.ward.district.province.id;
+
+    const payload = {
+      id: user.id,
+      fullName: formattedUser.fullName,
+      roles: formattedUser.roles,
+    };
     const accessToken = await this.jwtService.signAsync(payload);
-    return { accessToken: accessToken, user: user.toJSON() };
+    return { accessToken: accessToken, user: formattedUser };
   }
 
   async signUp(signUpDto: SignUpDto) {

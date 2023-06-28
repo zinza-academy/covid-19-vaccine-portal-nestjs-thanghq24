@@ -6,9 +6,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { MailModule } from 'src/mail/mail.module';
+import { RolesGuard } from './guard/roles.guard';
 
 @Module({
   imports: [
@@ -31,6 +32,10 @@ import { MailModule } from 'src/mail/mail.module';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
   exports: [AuthService],
