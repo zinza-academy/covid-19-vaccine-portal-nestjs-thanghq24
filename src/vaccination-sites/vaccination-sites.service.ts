@@ -13,13 +13,17 @@ export class VaccinationSitesService {
     private vaccinationSiteRepository: Repository<VaccinationSite>,
   ) {}
 
-  create(createVaccinationSiteDto: CreateVaccinationSiteDto) {
+  async create(createVaccinationSiteDto: CreateVaccinationSiteDto) {
     const vaccinationSite = this.vaccinationSiteRepository.create({
       ...createVaccinationSiteDto,
       ward: { id: createVaccinationSiteDto.ward },
     });
 
-    return this.vaccinationSiteRepository.save(vaccinationSite);
+    const createdVaccinationSite = await this.vaccinationSiteRepository.save(
+      vaccinationSite,
+    );
+
+    return this.findOne(createdVaccinationSite.id);
   }
 
   findAll(findQuery: FindVaccinationDto) {
@@ -79,7 +83,9 @@ export class VaccinationSitesService {
       ward: { id: updateVaccinationSiteDto.ward },
     });
 
-    return this.vaccinationSiteRepository.save(toUpdateVaccinationSite);
+    await this.vaccinationSiteRepository.save(toUpdateVaccinationSite);
+
+    return this.findOne(id);
   }
 
   async remove(id: number) {
