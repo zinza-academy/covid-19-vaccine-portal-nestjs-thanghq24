@@ -1,31 +1,87 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateVaccineRegistrationResultDto } from './dto/create-vaccine-registration-result.dto';
 import { UpdateVaccineRegistrationResultDto } from './dto/update-vaccine-registration-result.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { VaccineRegistrationResult } from 'src/entities/vaccine-registration-result.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class VaccineRegistrationResultService {
+  constructor(
+    @InjectRepository(VaccineRegistrationResult)
+    private readonly vaccineRegistrationResult: Repository<VaccineRegistrationResult>,
+  ) {}
+
   create(
     createVaccineRegistrationResultDto: CreateVaccineRegistrationResultDto,
   ) {
-    return 'This action adds a new vaccineRegistrationResult';
+    return this.vaccineRegistrationResult.save({
+      injectingTime: createVaccineRegistrationResultDto.injectingTime,
+      vaccinationSite: {
+        id: createVaccineRegistrationResultDto.vaccinationSite,
+      },
+      vaccineRegistration: {
+        id: createVaccineRegistrationResultDto.vaccineRegistration,
+      },
+      vaccineType: {
+        id: createVaccineRegistrationResultDto.vaccineType,
+      },
+    });
   }
 
   findAll() {
-    return `This action returns all vaccineRegistrationResult`;
+    return this.vaccineRegistrationResult.find({
+      relations: {
+        vaccinationSite: true,
+        vaccineRegistration: true,
+        vaccineType: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} vaccineRegistrationResult`;
+  async findOne(id: number) {
+    const vaccineRegistrationResult =
+      await this.vaccineRegistrationResult.findOne({
+        where: {
+          id: id,
+        },
+        relations: {
+          vaccinationSite: true,
+          vaccineRegistration: true,
+          vaccineType: true,
+        },
+      });
+
+    if (!vaccineRegistrationResult)
+      throw new NotFoundException('No vaccine registration result found!');
+
+    return vaccineRegistrationResult;
   }
 
-  update(
+  async update(
     id: number,
     updateVaccineRegistrationResultDto: UpdateVaccineRegistrationResultDto,
   ) {
-    return `This action updates a #${id} vaccineRegistrationResult`;
+    const updateVaccineRegistrationResult = await this.findOne(id);
+
+    return this.vaccineRegistrationResult.save({
+      id: updateVaccineRegistrationResult.id,
+      injectingTime: updateVaccineRegistrationResultDto.injectingTime,
+      vaccinationSite: {
+        id: updateVaccineRegistrationResultDto.vaccinationSite,
+      },
+      vaccineRegistration: {
+        id: updateVaccineRegistrationResultDto.vaccineRegistration,
+      },
+      vaccineType: {
+        id: updateVaccineRegistrationResultDto.vaccineType,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} vaccineRegistrationResult`;
+  async remove(id: number) {
+    await this.findOne(id);
+
+    return this.vaccineRegistrationResult.delete(id);
   }
 }
