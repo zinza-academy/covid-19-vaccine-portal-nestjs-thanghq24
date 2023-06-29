@@ -1,29 +1,72 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.dto';
 import { UpdateVaccineRegistrationDto } from './dto/update-vaccine-registration.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { VaccineRegistration } from 'src/entities/vaccine-registration.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class VaccineRegistrationService {
+  constructor(
+    @InjectRepository(VaccineRegistration)
+    private readonly vaccineRegistrationRepository: Repository<VaccineRegistration>,
+  ) {}
+
   create(createVaccineRegistrationDto: CreateVaccineRegistrationDto) {
-    return 'This action adds a new vaccineRegistration';
+    return this.vaccineRegistrationRepository.save({
+      ...createVaccineRegistrationDto,
+      user: { id: createVaccineRegistrationDto.user },
+    });
   }
 
-  findAll() {
-    return `This action returns all vaccineRegistration`;
+  findAll(userId: number) {
+    return this.vaccineRegistrationRepository.find({
+      where: {
+        user: { id: userId },
+      },
+      relations: {
+        user: true,
+        vaccineRegistrationResult: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} vaccineRegistration`;
+  async findOne(id: number) {
+    const vaccineRegistration =
+      await this.vaccineRegistrationRepository.findOne({
+        where: {
+          id: id,
+        },
+        relations: {
+          user: true,
+          vaccineRegistrationResult: true,
+        },
+      });
+
+    if (!vaccineRegistration)
+      throw new NotFoundException('No vaccine registration found!');
+
+    return vaccineRegistration;
   }
 
-  update(
+  async update(
     id: number,
     updateVaccineRegistrationDto: UpdateVaccineRegistrationDto,
   ) {
-    return `This action updates a #${id} vaccineRegistration`;
+    const updateVaccineRegistration = await this.findOne(id);
+
+    return this.vaccineRegistrationRepository.save({
+      ...updateVaccineRegistration,
+      ...updateVaccineRegistrationDto,
+      user: {
+        id: updateVaccineRegistration.id,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} vaccineRegistration`;
+  async remove(id: number) {
+    await this.findOne(id);
+
+    return this.vaccineRegistrationRepository.delete(id);
   }
 }

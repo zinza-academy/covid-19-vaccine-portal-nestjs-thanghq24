@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { VaccineType } from './vaccine-type.entity';
 import { VaccinationSite } from './vaccination-site.entity';
-import { VaccineRegistration } from './vaccine_registration.entity';
+import { VaccineRegistration } from './vaccine-registration.entity';
 
 @Entity()
 export class VaccineRegistrationResult {
@@ -34,7 +34,10 @@ export class VaccineRegistrationResult {
   @JoinColumn([{ name: 'vaccination_site_id', referencedColumnName: 'id' }])
   vaccinationSite: VaccinationSite;
 
-  @OneToOne(() => VaccineRegistration)
+  @OneToOne(
+    () => VaccineRegistration,
+    (vaccineRegistration) => vaccineRegistration.vaccineRegistrationResult,
+  )
   @JoinColumn()
   vaccineRegistration: VaccineRegistration;
 }

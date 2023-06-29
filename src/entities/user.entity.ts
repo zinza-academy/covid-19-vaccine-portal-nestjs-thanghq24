@@ -12,7 +12,8 @@ import {
 import { Role } from './role.entity';
 import { Ward } from './ward.entity';
 import { Exclude, instanceToPlain } from 'class-transformer';
-import { VaccineRegistration } from './vaccine_registration.entity';
+import { VaccineRegistration } from './vaccine-registration.entity';
+import { ROLES } from '../auth/decorator/allowed-roles.decorator';
 
 export enum Gender {
   MALE = 'M',
@@ -77,5 +78,9 @@ export class User {
 
   validatePassword(password: string) {
     return bcrypt.compare(password, this.password);
+  }
+
+  isAdmin() {
+    return this.roles.some((userRoles) => userRoles.id === ROLES.ADMIN);
   }
 }

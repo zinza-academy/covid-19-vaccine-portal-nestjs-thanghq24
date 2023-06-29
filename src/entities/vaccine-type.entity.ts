@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { VaccineRegistrationResult } from './vaccine_registration_result.entity';
+import { VaccineRegistrationResult } from './vaccine-registration-result.entity';
 
 @Entity()
 export class VaccineType {

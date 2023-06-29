@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Ward } from './ward.entity';
-import { VaccineRegistrationResult } from './vaccine_registration_result.entity';
+import { VaccineRegistrationResult } from './vaccine-registration-result.entity';
 
 @Entity()
 export class VaccinationSite {

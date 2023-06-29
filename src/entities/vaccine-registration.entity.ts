@@ -7,13 +7,13 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { VaccineRegistrationResult } from './vaccine_registration_result.entity';
+import { VaccineRegistrationResult } from './vaccine-registration-result.entity';
 
 export enum STATUS {
-  REQUESTED = '0',
-  ACCEPTED = '1',
-  REJECTED = '2',
-  COMPLETED = '3',
+  REQUESTED = 0,
+  ACCEPTED = 1,
+  REJECTED = 2,
+  COMPLETED = 3,
 }
 
 @Entity()
@@ -48,6 +48,10 @@ export class VaccineRegistration {
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: User;
 
-  @OneToOne(() => VaccineRegistrationResult)
+  @OneToOne(
+    () => VaccineRegistrationResult,
+    (vaccineRegistrationResult) =>
+      vaccineRegistrationResult.vaccineRegistration,
+  )
   vaccineRegistrationResult: VaccineRegistrationResult;
 }

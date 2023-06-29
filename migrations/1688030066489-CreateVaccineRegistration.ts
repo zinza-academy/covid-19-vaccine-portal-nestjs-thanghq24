@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class AddVaccineRegistration1688025016097 implements MigrationInterface {
-    name = 'AddVaccineRegistration1688025016097'
+export class CreateVaccineRegistration1688030066489 implements MigrationInterface {
+    name = 'CreateVaccineRegistration1688030066489'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE \`vaccine_type\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`batch_number\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
