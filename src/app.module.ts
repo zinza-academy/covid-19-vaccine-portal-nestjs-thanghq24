@@ -11,6 +11,7 @@ import { DistrictsModule } from './districts/districts.module';
 import { WardsModule } from './wards/wards.module';
 import { MailModule } from './mail/mail.module';
 import { VaccinationSitesModule } from './vaccination-sites/vaccination-sites.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { VaccinationSitesModule } from './vaccination-sites/vaccination-sites.mo
     WardsModule,
     MailModule,
     VaccinationSitesModule,
+    CaslModule,
   ],
   controllers: [AppController],
   providers: [AppService],

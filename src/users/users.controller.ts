@@ -8,21 +8,35 @@ import {
   Delete,
   ParseIntPipe,
   Query,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import {
+  AllowedRoles,
+  ROLES,
+} from 'src/auth/decorator/allowed-roles.decorator';
+import { CaslAbilityFactory } from 'src/casl/casl-ability.factory/casl-ability.factory';
+import { Action } from 'src/casl/Action';
+import { User } from 'src/entities/user.entity';
+import { GetUserFromJwtPayload } from 'src/auth/decorator/get-user-payload.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private caslAbilityFactory: CaslAbilityFactory,
+    private readonly usersService: UsersService,
+  ) {}
 
+  @AllowedRoles(ROLES.ADMIN)
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const createdUser = await this.usersService.create(createUserDto);
     return createdUser;
   }
 
+  @AllowedRoles(ROLES.ADMIN)
   @Get()
   async findAll(
     @Query('page', ParseIntPipe) page: number,
@@ -32,24 +46,45 @@ export class UsersController {
     return users;
   }
 
+  @AllowedRoles(ROLES.ADMIN, ROLES.USER)
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    const user = await this.usersService.findOne(id);
-    return user;
+  async findOne(
+    @GetUserFromJwtPayload('user') user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const foundUser = await this.usersService.findOne(id);
+    const ability = this.caslAbilityFactory.createForUser(user);
+
+    if (!ability.can(Action.Read, foundUser)) {
+      throw new ForbiddenException('You cannot see other account details!');
+    }
+
+    return foundUser;
   }
 
+  @AllowedRoles(ROLES.ADMIN, ROLES.USER)
   @Patch(':id')
   async update(
+    @GetUserFromJwtPayload('user') user: User,
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
+    const existingUser = await this.usersService.findOne(id);
+    const ability = this.caslAbilityFactory.createForUser(user);
+
+    if (!ability.can(Action.Read, existingUser)) {
+      throw new ForbiddenException('You cannot modify other account details!');
+    }
+
     const updatedUser = await this.usersService.update(id, updateUserDto);
+
     return updatedUser;
   }
 
+  @AllowedRoles(ROLES.ADMIN)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     await this.usersService.remove(id);
-    return `User with id ${id} has been deleted`;
+    return { message: `User with id ${id} has been deleted` };
   }
 }

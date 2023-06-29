@@ -22,6 +22,8 @@ export class RolesGuard extends BaseAuthGuard implements CanActivate {
     if (!user) return super.canActivate(context);
     if (!allowedRoles) return super.canActivate(context);
 
+    console.log('handle roles');
+
     const hasRole = allowedRoles.some((allowedRole) =>
       user.roles.some((userRole) => {
         return userRole.id === allowedRole;
