@@ -6,11 +6,13 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Role } from './role.entity';
 import { Ward } from './ward.entity';
 import { Exclude, instanceToPlain } from 'class-transformer';
+import { VaccineRegistration } from './vaccine_registration.entity';
 
 export enum Gender {
   MALE = 'M',
@@ -62,6 +64,12 @@ export class User {
     name: 'user_role',
   })
   roles: Role[];
+
+  @OneToMany(
+    () => VaccineRegistration,
+    (vaccineRegistration) => vaccineRegistration.user,
+  )
+  vaccineRegistrations: VaccineRegistration[];
 
   toJSON() {
     return instanceToPlain(this);

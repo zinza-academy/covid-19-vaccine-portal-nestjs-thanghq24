@@ -17,6 +17,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
         database: configService.get('DATABASE_NAME'),
         entities: ['dist/src/entities/*.entity.js'],
         namingStrategy: new SnakeNamingStrategy(),
+        timezone: 'Z',
       }),
     }),
   ],
