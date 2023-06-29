@@ -12,6 +12,8 @@ export class BaseAuthGuard implements CanActivate {
       context.getClass(),
     ]);
 
+    console.log('handle base (public)');
+
     if (isPublic) {
       return true;
     }
