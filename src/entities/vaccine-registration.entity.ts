@@ -10,10 +10,10 @@ import { User } from './user.entity';
 import { VaccineRegistrationResult } from './vaccine-registration-result.entity';
 
 export enum STATUS {
-  REQUESTED = 0,
-  ACCEPTED = 1,
-  REJECTED = 2,
-  COMPLETED = 3,
+  REQUESTED = 'REQUESTED',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
+  COMPLETED = 'COMPLETED',
 }
 
 @Entity()

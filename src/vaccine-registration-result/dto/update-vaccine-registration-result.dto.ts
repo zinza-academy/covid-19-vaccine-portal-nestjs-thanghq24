@@ -1,4 +1,15 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateVaccineRegistrationResultDto } from './create-vaccine-registration-result.dto';
+import { IsDateString, IsNotEmpty, IsNumber } from 'class-validator';
 
-export class UpdateVaccineRegistrationResultDto extends PartialType(CreateVaccineRegistrationResultDto) {}
+export class UpdateVaccineRegistrationResultDto {
+  @IsNumber()
+  @IsNotEmpty()
+  vaccineType: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  vaccinationSite: number;
+
+  @IsDateString()
+  @IsNotEmpty()
+  injectingTime: string;
+}

@@ -88,7 +88,6 @@ export class DivisionReaderService {
       .into(Ward)
       .values(wards)
       .execute();
-
     return;
   }
 }

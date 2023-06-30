@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   ForbiddenException,
+  UseInterceptors,
 } from '@nestjs/common';
 import { VaccineRegistrationService } from './vaccine-registration.service';
 import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.dto';
@@ -19,6 +20,8 @@ import {
 import { GetUserFromJwtPayload } from 'src/auth/decorator/get-user-payload.decorator';
 import { User } from 'src/entities/user.entity';
 import { FindVaccineRegistrationDto } from './dto/find-vaccine-registration.dto';
+import { DecideRegistrationDto } from './dto/decide-registration-dto';
+import { PaginationInterceptor } from 'src/interceptor/pagination.interceptor';
 
 @Controller('vaccine-registration')
 export class VaccineRegistrationController {
@@ -38,6 +41,7 @@ export class VaccineRegistrationController {
     return this.vaccineRegistrationService.create(createVaccineRegistrationDto);
   }
 
+  @UseInterceptors(PaginationInterceptor)
   @AllowedRoles(ROLES.ADMIN, ROLES.USER)
   @Get()
   findAll(
@@ -50,9 +54,7 @@ export class VaccineRegistrationController {
         'You can only look for your own vaccine registrations!',
       );
 
-    return this.vaccineRegistrationService.findAll(
-      findVaccineRegistrationDto.userId,
-    );
+    return this.vaccineRegistrationService.findAll(findVaccineRegistrationDto);
   }
 
   @AllowedRoles(ROLES.ADMIN, ROLES.USER)
@@ -68,6 +70,18 @@ export class VaccineRegistrationController {
       );
 
     return vaccineRegistration;
+  }
+
+  @AllowedRoles(ROLES.ADMIN)
+  @Patch('decide-registration/:id')
+  decideRegistration(
+    @Param('id') id: number,
+    @Body() decideRegistrationDto: DecideRegistrationDto,
+  ) {
+    return this.vaccineRegistrationService.decideRegistration(
+      id,
+      decideRegistrationDto.status,
+    );
   }
 
   @AllowedRoles(ROLES.ADMIN)

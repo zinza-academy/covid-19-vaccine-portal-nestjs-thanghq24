@@ -16,9 +16,10 @@ export class VaccineRegistrationResult {
   id: number;
 
   @Column({
-    type: 'date',
+    type: 'datetime',
+    nullable: true,
   })
-  injectingTime: string;
+  injectingTime: Date;
 
   @ManyToOne(
     () => VaccineType,
@@ -37,6 +38,7 @@ export class VaccineRegistrationResult {
   @OneToOne(
     () => VaccineRegistration,
     (vaccineRegistration) => vaccineRegistration.vaccineRegistrationResult,
+    { nullable: false },
   )
   @JoinColumn()
   vaccineRegistration: VaccineRegistration;

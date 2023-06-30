@@ -64,19 +64,19 @@ export class VaccineRegistrationResultService {
   ) {
     const updateVaccineRegistrationResult = await this.findOne(id);
 
-    return this.vaccineRegistrationResult.save({
-      id: updateVaccineRegistrationResult.id,
-      injectingTime: updateVaccineRegistrationResultDto.injectingTime,
-      vaccinationSite: {
-        id: updateVaccineRegistrationResultDto.vaccinationSite,
-      },
-      vaccineRegistration: {
-        id: updateVaccineRegistrationResultDto.vaccineRegistration,
-      },
-      vaccineType: {
-        id: updateVaccineRegistrationResultDto.vaccineType,
-      },
-    });
+    const updatedVaccineRegistration =
+      await this.vaccineRegistrationResult.save({
+        id: updateVaccineRegistrationResult.id,
+        injectingTime: updateVaccineRegistrationResultDto.injectingTime,
+        vaccinationSite: {
+          id: updateVaccineRegistrationResultDto.vaccinationSite,
+        },
+        vaccineType: {
+          id: updateVaccineRegistrationResultDto.vaccineType,
+        },
+      });
+
+    return this.findOne(updatedVaccineRegistration.id);
   }
 
   async remove(id: number) {

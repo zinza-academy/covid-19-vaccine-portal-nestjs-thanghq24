@@ -1,32 +1,51 @@
+import { VaccineRegistrationResultService } from './../vaccine-registration-result/vaccine-registration-result.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.dto';
 import { UpdateVaccineRegistrationDto } from './dto/update-vaccine-registration.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VaccineRegistration } from 'src/entities/vaccine-registration.entity';
+import {
+  STATUS,
+  VaccineRegistration,
+} from 'src/entities/vaccine-registration.entity';
 import { Repository } from 'typeorm';
+import { FindVaccineRegistrationDto } from './dto/find-vaccine-registration.dto';
 
 @Injectable()
 export class VaccineRegistrationService {
   constructor(
     @InjectRepository(VaccineRegistration)
     private readonly vaccineRegistrationRepository: Repository<VaccineRegistration>,
+    private readonly vaccineRegistrationResultService: VaccineRegistrationResultService,
   ) {}
 
-  create(createVaccineRegistrationDto: CreateVaccineRegistrationDto) {
-    return this.vaccineRegistrationRepository.save({
-      ...createVaccineRegistrationDto,
-      user: { id: createVaccineRegistrationDto.user },
-    });
+  async create(createVaccineRegistrationDto: CreateVaccineRegistrationDto) {
+    const createdVaccineRegistration =
+      await this.vaccineRegistrationRepository.save({
+        ...createVaccineRegistrationDto,
+        user: { id: createVaccineRegistrationDto.user },
+      });
+
+    return this.findOne(createdVaccineRegistration.id);
   }
 
-  findAll(userId: number) {
-    return this.vaccineRegistrationRepository.find({
+  findAll(findVaccineRegistrationDto: FindVaccineRegistrationDto) {
+    const { page, pageSize, status, userId, appointmentDate, priorityType } =
+      findVaccineRegistrationDto;
+    return this.vaccineRegistrationRepository.findAndCount({
+      take: pageSize,
+      skip: page * pageSize,
       where: {
         user: { id: userId },
+        status: status,
+        priorityType: priorityType,
+        appointmentDate: appointmentDate,
       },
       relations: {
-        user: true,
-        vaccineRegistrationResult: true,
+        user: { roles: true, ward: { district: { province: true } } },
+        vaccineRegistrationResult: {
+          vaccinationSite: true,
+          vaccineType: true,
+        },
       },
     });
   }
@@ -38,8 +57,12 @@ export class VaccineRegistrationService {
           id: id,
         },
         relations: {
-          user: true,
-          vaccineRegistrationResult: true,
+          user: { roles: true, ward: { district: { province: true } } },
+          vaccineRegistrationResult: {
+            vaccinationSite: true,
+            vaccineType: true,
+            vaccineRegistration: false,
+          },
         },
       });
 
@@ -49,19 +72,38 @@ export class VaccineRegistrationService {
     return vaccineRegistration;
   }
 
+  async decideRegistration(id: number, status: STATUS) {
+    const registration = await this.findOne(id);
+
+    await this.vaccineRegistrationRepository.update(id, { status: status });
+
+    if (
+      registration.vaccineRegistrationResult === null &&
+      status === STATUS.ACCEPTED
+    ) {
+      await this.vaccineRegistrationResultService.create({
+        injectingTime: null,
+        vaccinationSite: null,
+        vaccineRegistration: id,
+        vaccineType: null,
+      });
+    }
+
+    return this.findOne(id);
+  }
+
   async update(
     id: number,
     updateVaccineRegistrationDto: UpdateVaccineRegistrationDto,
   ) {
-    const updateVaccineRegistration = await this.findOne(id);
+    await this.findOne(id);
 
-    return this.vaccineRegistrationRepository.save({
-      ...updateVaccineRegistration,
-      ...updateVaccineRegistrationDto,
-      user: {
-        id: updateVaccineRegistration.id,
-      },
-    });
+    await this.vaccineRegistrationRepository.update(
+      id,
+      updateVaccineRegistrationDto,
+    );
+
+    return this.findOne(id);
   }
 
   async remove(id: number) {

@@ -1,20 +1,13 @@
 import { Type } from 'class-transformer';
 import {
   IsDateString,
-  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsString,
   MaxLength,
 } from 'class-validator';
-import { STATUS } from 'src/entities/vaccine-registration.entity';
 
 export class CreateVaccineRegistrationDto {
-  @Type(() => Number)
-  @IsEnum(STATUS)
-  @IsNotEmpty()
-  status: STATUS;
-
   @Type(() => Number)
   @IsNumber()
   @IsNotEmpty()

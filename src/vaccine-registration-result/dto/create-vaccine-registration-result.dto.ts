@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateVaccineRegistrationResultDto {
   @IsNumber()
@@ -13,6 +13,6 @@ export class CreateVaccineRegistrationResultDto {
   @IsNotEmpty()
   vaccineRegistration: number;
 
-  @IsDate()
+  @IsDateString()
   injectingTime: string;
 }

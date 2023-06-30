@@ -8,5 +8,6 @@ import { VaccineRegistrationResult } from 'src/entities/vaccine-registration-res
   imports: [TypeOrmModule.forFeature([VaccineRegistrationResult])],
   controllers: [VaccineRegistrationResultController],
   providers: [VaccineRegistrationResultService],
+  exports: [VaccineRegistrationResultService],
 })
 export class VaccineRegistrationResultModule {}

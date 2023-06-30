@@ -1,14 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
 import { VaccineRegistrationResultService } from './vaccine-registration-result.service';
-import { CreateVaccineRegistrationResultDto } from './dto/create-vaccine-registration-result.dto';
 import { UpdateVaccineRegistrationResultDto } from './dto/update-vaccine-registration-result.dto';
 import {
   AllowedRoles,
@@ -20,17 +11,6 @@ export class VaccineRegistrationResultController {
   constructor(
     private readonly vaccineRegistrationResultService: VaccineRegistrationResultService,
   ) {}
-
-  @AllowedRoles(ROLES.ADMIN)
-  @Post()
-  create(
-    @Body()
-    createVaccineRegistrationResultDto: CreateVaccineRegistrationResultDto,
-  ) {
-    return this.vaccineRegistrationResultService.create(
-      createVaccineRegistrationResultDto,
-    );
-  }
 
   @AllowedRoles(ROLES.ADMIN)
   @Get()
