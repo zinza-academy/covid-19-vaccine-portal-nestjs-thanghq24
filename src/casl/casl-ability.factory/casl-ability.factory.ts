@@ -25,8 +25,6 @@ export class CaslAbilityFactory {
       (userRoles) => userRoles.id === ROLES.ADMIN,
     );
 
-    console.log('User is ' + (isAdmin ? 'admin' : 'client'));
-
     if (isAdmin) {
       can(Action.Manage, 'all');
     } else {

@@ -29,7 +29,6 @@ export class DivisionReaderService {
     description: 'Read divisions data from xlsx',
   })
   async readProvinceData() {
-    console.log('Read divisions from xlsx');
     const workbook = new ExcelJS.Workbook();
     const provinces: IProvince[] = [];
     const districts: IDistrict[] = [];
@@ -90,7 +89,6 @@ export class DivisionReaderService {
       .values(wards)
       .execute();
 
-    console.log('DONE READING DATA');
     return;
   }
 }
