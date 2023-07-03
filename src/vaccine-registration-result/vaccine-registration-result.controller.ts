@@ -6,7 +6,7 @@ import {
   ROLES,
 } from 'src/auth/decorator/allowed-roles.decorator';
 
-@Controller('vaccine-registration-result')
+@Controller('vaccine-registration-results')
 export class VaccineRegistrationResultController {
   constructor(
     private readonly vaccineRegistrationResultService: VaccineRegistrationResultService,

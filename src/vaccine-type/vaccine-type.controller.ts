@@ -15,7 +15,7 @@ import {
   ROLES,
 } from 'src/auth/decorator/allowed-roles.decorator';
 
-@Controller('vaccine-type')
+@Controller('vaccine-types')
 export class VaccineTypeController {
   constructor(private readonly vaccineTypeService: VaccineTypeService) {}
 

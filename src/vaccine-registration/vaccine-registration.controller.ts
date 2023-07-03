@@ -23,7 +23,7 @@ import { FindVaccineRegistrationDto } from './dto/find-vaccine-registration.dto'
 import { DecideRegistrationDto } from './dto/decide-registration-dto';
 import { PaginationInterceptor } from 'src/interceptor/pagination.interceptor';
 
-@Controller('vaccine-registration')
+@Controller('vaccine-registrations')
 export class VaccineRegistrationController {
   constructor(
     private readonly vaccineRegistrationService: VaccineRegistrationService,
