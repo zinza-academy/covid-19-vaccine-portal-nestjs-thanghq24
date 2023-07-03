@@ -13,11 +13,11 @@ import { Role } from './role.entity';
 import { Ward } from './ward.entity';
 import { Exclude, instanceToPlain } from 'class-transformer';
 import { VaccineRegistration } from './vaccine-registration.entity';
-import { ROLES } from '../auth/decorator/allowed-roles.decorator';
+import { Roles } from '../auth/decorator/allowed-roles.decorator';
 
 export enum Gender {
-  MALE = 'M',
-  FEMALE = 'F',
+  Male = 'M',
+  Female = 'F',
 }
 
 @Entity()
@@ -81,6 +81,6 @@ export class User {
   }
 
   isAdmin() {
-    return this.roles.some((userRoles) => userRoles.id === ROLES.ADMIN);
+    return this.roles.some((userRoles) => userRoles.id === Roles.Admin);
   }
 }

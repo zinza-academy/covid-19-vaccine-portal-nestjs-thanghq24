@@ -7,7 +7,7 @@ import {
   IsOptional,
   MaxLength,
 } from 'class-validator';
-import { STATUS } from 'src/entities/vaccine-registration.entity';
+import { VaccineRegistrationStatus } from 'src/entities/vaccine-registration.entity';
 
 export class FindVaccineRegistrationDto {
   @Type(() => Number)
@@ -35,7 +35,7 @@ export class FindVaccineRegistrationDto {
   @IsOptional()
   appointmentDate: string;
 
-  @IsEnum(STATUS)
+  @IsEnum(VaccineRegistrationStatus)
   @IsOptional()
-  status: STATUS;
+  status: VaccineRegistrationStatus;
 }

@@ -1,8 +1,8 @@
 import { IsEnum, IsNotEmpty } from 'class-validator';
-import { STATUS } from 'src/entities/vaccine-registration.entity';
+import { VaccineRegistrationStatus } from 'src/entities/vaccine-registration.entity';
 
 export class DecideRegistrationDto {
-  @IsEnum(STATUS)
+  @IsEnum(VaccineRegistrationStatus)
   @IsNotEmpty()
-  status: STATUS;
+  status: VaccineRegistrationStatus;
 }

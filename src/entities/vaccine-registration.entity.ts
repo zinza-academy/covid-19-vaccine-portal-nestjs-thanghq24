@@ -9,11 +9,11 @@ import {
 import { User } from './user.entity';
 import { VaccineRegistrationResult } from './vaccine-registration-result.entity';
 
-export enum STATUS {
-  REQUESTED = 'REQUESTED',
-  ACCEPTED = 'ACCEPTED',
-  REJECTED = 'REJECTED',
-  COMPLETED = 'COMPLETED',
+export enum VaccineRegistrationStatus {
+  Requested = 'requested',
+  Accepted = 'accepted',
+  Rejected = 'rejected',
+  Completed = 'completed',
 }
 
 @Entity()
@@ -21,8 +21,12 @@ export class VaccineRegistration {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'enum', enum: STATUS, default: STATUS.REQUESTED })
-  status: STATUS;
+  @Column({
+    type: 'enum',
+    enum: VaccineRegistrationStatus,
+    default: VaccineRegistrationStatus.Requested,
+  })
+  status: VaccineRegistrationStatus;
 
   @Column()
   priorityType: number;

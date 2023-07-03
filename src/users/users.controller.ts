@@ -15,7 +15,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   AllowedRoles,
-  ROLES,
+  Roles,
 } from 'src/auth/decorator/allowed-roles.decorator';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory/casl-ability.factory';
 import { Action } from 'src/casl/Action';
@@ -29,14 +29,14 @@ export class UsersController {
     private readonly usersService: UsersService,
   ) {}
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const createdUser = await this.usersService.create(createUserDto);
     return createdUser;
   }
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Get()
   async findAll(
     @Query('page', ParseIntPipe) page: number,
@@ -46,7 +46,7 @@ export class UsersController {
     return users;
   }
 
-  @AllowedRoles(ROLES.ADMIN, ROLES.USER)
+  @AllowedRoles(Roles.Admin, Roles.User)
   @Get(':id')
   async findOne(
     @GetUserFromJwtPayload('user') user: User,
@@ -62,7 +62,7 @@ export class UsersController {
     return foundUser;
   }
 
-  @AllowedRoles(ROLES.ADMIN, ROLES.USER)
+  @AllowedRoles(Roles.Admin, Roles.User)
   @Patch(':id')
   async update(
     @GetUserFromJwtPayload('user') user: User,
@@ -81,7 +81,7 @@ export class UsersController {
     return updatedUser;
   }
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     await this.usersService.remove(id);

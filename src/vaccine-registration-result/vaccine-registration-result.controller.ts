@@ -3,7 +3,7 @@ import { VaccineRegistrationResultService } from './vaccine-registration-result.
 import { UpdateVaccineRegistrationResultDto } from './dto/update-vaccine-registration-result.dto';
 import {
   AllowedRoles,
-  ROLES,
+  Roles,
 } from 'src/auth/decorator/allowed-roles.decorator';
 
 @Controller('vaccine-registration-results')
@@ -12,19 +12,19 @@ export class VaccineRegistrationResultController {
     private readonly vaccineRegistrationResultService: VaccineRegistrationResultService,
   ) {}
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Get()
   findAll() {
     return this.vaccineRegistrationResultService.findAll();
   }
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.vaccineRegistrationResultService.findOne(+id);
   }
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -37,7 +37,7 @@ export class VaccineRegistrationResultController {
     );
   }
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.vaccineRegistrationResultService.remove(+id);

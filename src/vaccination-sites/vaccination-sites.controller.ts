@@ -15,7 +15,7 @@ import { UpdateVaccinationSiteDto } from './dto/update-vaccination-site.dto';
 import { Public } from 'src/auth/decorator/public-route.decorator';
 import {
   AllowedRoles,
-  ROLES,
+  Roles,
 } from 'src/auth/decorator/allowed-roles.decorator';
 import { PaginationInterceptor } from 'src/interceptor/pagination.interceptor';
 import { FindVaccinationDto } from './dto/find-vaccination-site.dto';
@@ -26,7 +26,7 @@ export class VaccinationSitesController {
     private readonly vaccinationSitesService: VaccinationSitesService,
   ) {}
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Post()
   create(@Body() createVaccinationSiteDto: CreateVaccinationSiteDto) {
     return this.vaccinationSitesService.create(createVaccinationSiteDto);
@@ -45,7 +45,7 @@ export class VaccinationSitesController {
     return this.vaccinationSitesService.findOne(+id);
   }
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -54,7 +54,7 @@ export class VaccinationSitesController {
     return this.vaccinationSitesService.update(+id, updateVaccinationSiteDto);
   }
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     await this.vaccinationSitesService.remove(+id);

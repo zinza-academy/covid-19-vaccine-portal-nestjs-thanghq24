@@ -15,7 +15,7 @@ import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.
 import { UpdateVaccineRegistrationDto } from './dto/update-vaccine-registration.dto';
 import {
   AllowedRoles,
-  ROLES,
+  Roles,
 } from 'src/auth/decorator/allowed-roles.decorator';
 import { GetUserFromJwtPayload } from 'src/auth/decorator/get-user-payload.decorator';
 import { User } from 'src/entities/user.entity';
@@ -29,7 +29,7 @@ export class VaccineRegistrationController {
     private readonly vaccineRegistrationService: VaccineRegistrationService,
   ) {}
 
-  @AllowedRoles(ROLES.ADMIN, ROLES.USER)
+  @AllowedRoles(Roles.Admin, Roles.User)
   @Post()
   create(
     @GetUserFromJwtPayload() user: User,
@@ -42,7 +42,7 @@ export class VaccineRegistrationController {
   }
 
   @UseInterceptors(PaginationInterceptor)
-  @AllowedRoles(ROLES.ADMIN, ROLES.USER)
+  @AllowedRoles(Roles.Admin, Roles.User)
   @Get()
   findAll(
     @GetUserFromJwtPayload() user: User,
@@ -57,7 +57,7 @@ export class VaccineRegistrationController {
     return this.vaccineRegistrationService.findAll(findVaccineRegistrationDto);
   }
 
-  @AllowedRoles(ROLES.ADMIN, ROLES.USER)
+  @AllowedRoles(Roles.Admin, Roles.User)
   @Get(':id')
   async findOne(@GetUserFromJwtPayload() user: User, @Param('id') id: string) {
     const vaccineRegistration = await this.vaccineRegistrationService.findOne(
@@ -72,7 +72,7 @@ export class VaccineRegistrationController {
     return vaccineRegistration;
   }
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Patch('decide-registration/:id')
   decideRegistration(
     @Param('id') id: number,
@@ -84,7 +84,7 @@ export class VaccineRegistrationController {
     );
   }
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -96,7 +96,7 @@ export class VaccineRegistrationController {
     );
   }
 
-  @AllowedRoles(ROLES.ADMIN)
+  @AllowedRoles(Roles.Admin)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     await this.vaccineRegistrationService.remove(+id);

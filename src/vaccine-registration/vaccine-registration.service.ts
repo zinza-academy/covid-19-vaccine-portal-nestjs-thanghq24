@@ -4,7 +4,7 @@ import { CreateVaccineRegistrationDto } from './dto/create-vaccine-registration.
 import { UpdateVaccineRegistrationDto } from './dto/update-vaccine-registration.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  STATUS,
+  VaccineRegistrationStatus,
   VaccineRegistration,
 } from 'src/entities/vaccine-registration.entity';
 import { Repository } from 'typeorm';
@@ -72,14 +72,14 @@ export class VaccineRegistrationService {
     return vaccineRegistration;
   }
 
-  async decideRegistration(id: number, status: STATUS) {
+  async decideRegistration(id: number, status: VaccineRegistrationStatus) {
     const registration = await this.findOne(id);
 
     await this.vaccineRegistrationRepository.update(id, { status: status });
 
     if (
       registration.vaccineRegistrationResult === null &&
-      status === STATUS.ACCEPTED
+      status === VaccineRegistrationStatus.Accepted
     ) {
       await this.vaccineRegistrationResultService.create({
         injectingTime: null,
