@@ -21,8 +21,8 @@ export class PaginationInterceptor<T>
   ): Observable<Response<T>> {
     const request = context.switchToHttp().getRequest();
 
-    const page = request.query.page;
-    const pageSize = request.query.pageSize;
+    const page = Number(request.query.page);
+    const pageSize = Number(request.query.pageSize);
 
     return next.handle().pipe(
       map((data) => ({

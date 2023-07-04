@@ -3,9 +3,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Ward } from './ward.entity';
+import { VaccineRegistrationResult } from './vaccine-registration-result.entity';
 
 @Entity()
 export class VaccinationSite {
@@ -27,4 +29,10 @@ export class VaccinationSite {
 
   @Column('int')
   tableNumber: number;
+
+  @OneToMany(
+    () => VaccineRegistrationResult,
+    (vaccineRegistrationResult) => vaccineRegistrationResult.vaccinationSite,
+  )
+  vaccineRegistrationResults: VaccineRegistrationResult[];
 }

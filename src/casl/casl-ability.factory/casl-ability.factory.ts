@@ -8,7 +8,7 @@ import {
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/entities/user.entity';
 import { Action } from '../Action';
-import { ROLES } from 'src/auth/decorator/allowed-roles.decorator';
+import { Roles } from 'src/auth/decorator/allowed-roles.decorator';
 
 type Subjects = InferSubjects<typeof User> | 'all';
 
@@ -22,7 +22,7 @@ export class CaslAbilityFactory {
     >(Ability as AbilityClass<AppAbility>);
 
     const isAdmin = user.roles.some(
-      (userRoles) => userRoles.id === ROLES.ADMIN,
+      (userRoles) => userRoles.id === Roles.Admin,
     );
 
     if (isAdmin) {

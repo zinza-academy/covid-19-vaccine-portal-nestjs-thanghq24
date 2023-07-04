@@ -6,15 +6,18 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Role } from './role.entity';
 import { Ward } from './ward.entity';
 import { Exclude, instanceToPlain } from 'class-transformer';
+import { VaccineRegistration } from './vaccine-registration.entity';
+import { Roles } from '../auth/decorator/allowed-roles.decorator';
 
 export enum Gender {
-  MALE = 'M',
-  FEMALE = 'F',
+  Male = 'M',
+  Female = 'F',
 }
 
 @Entity()
@@ -63,11 +66,21 @@ export class User {
   })
   roles: Role[];
 
+  @OneToMany(
+    () => VaccineRegistration,
+    (vaccineRegistration) => vaccineRegistration.user,
+  )
+  vaccineRegistrations: VaccineRegistration[];
+
   toJSON() {
     return instanceToPlain(this);
   }
 
   validatePassword(password: string) {
     return bcrypt.compare(password, this.password);
+  }
+
+  isAdmin() {
+    return this.roles.some((userRoles) => userRoles.id === Roles.Admin);
   }
 }

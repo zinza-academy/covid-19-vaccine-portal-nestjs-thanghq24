@@ -1,6 +1,6 @@
 import { BaseAuthGuard } from './base-auth.guard';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { ROLES } from '../decorator/allowed-roles.decorator';
+import { Roles } from '../decorator/allowed-roles.decorator';
 import { Reflector } from '@nestjs/core';
 import { User } from 'src/entities/user.entity';
 
@@ -11,8 +11,8 @@ export class RolesGuard extends BaseAuthGuard implements CanActivate {
   }
 
   canActivate(context: ExecutionContext) {
-    const allowedRoles = this.reflector.get<ROLES[]>(
-      'ALLOWED_ROLES',
+    const allowedRoles = this.reflector.get<Roles[]>(
+      'AllowedRoles',
       context.getHandler(),
     );
 

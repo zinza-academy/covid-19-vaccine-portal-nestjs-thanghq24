@@ -27,9 +27,6 @@ export class AuthService {
     if (!correctPassword) throw new UnauthorizedException();
 
     const formattedUser = user.toJSON();
-    formattedUser.ward = user.ward.id;
-    formattedUser.district = user.ward.district.id;
-    formattedUser.province = user.ward.district.province.id;
 
     const payload = {
       id: user.id,
