@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, StreamableFile } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -58,7 +58,10 @@ export class DocumentsService {
     const file = createReadStream(join(process.cwd(), document.file.path));
     if (!file) throw new NotFoundException('No file found on the storage!');
 
-    return new StreamableFile(file);
+    return {
+      fileName: document.name,
+      file: file,
+    };
   }
 
   async update(
@@ -67,8 +70,6 @@ export class DocumentsService {
     file: Express.Multer.File,
   ) {
     const existingDocument = await this.findOne(id);
-
-    console.log(file);
 
     if (file) {
       unlinkSync(join(process.cwd(), existingDocument.file.path));

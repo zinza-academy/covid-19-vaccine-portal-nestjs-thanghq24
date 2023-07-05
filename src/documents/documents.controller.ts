@@ -11,6 +11,8 @@ import {
   UnprocessableEntityException,
   ParseFilePipe,
   MaxFileSizeValidator,
+  StreamableFile,
+  Res,
 } from '@nestjs/common';
 import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
@@ -23,6 +25,7 @@ import {
 import { Public } from 'src/auth/decorator/public-route.decorator';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { Response } from 'express';
 
 @Controller('documents')
 export class DocumentsController {
@@ -58,8 +61,18 @@ export class DocumentsController {
 
   @Public()
   @Get('download/:id')
-  downloadOne(@Param('id') id: string) {
-    return this.documentsService.downloadOneFile(+id);
+  async downloadOne(
+    @Param('id') id: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const downloadFile = await this.documentsService.downloadOneFile(+id);
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="${downloadFile.fileName}.pdf"`,
+    });
+
+    return new StreamableFile(downloadFile.file);
   }
 
   @Public()
@@ -82,7 +95,6 @@ export class DocumentsController {
     )
     file: Express.Multer.File,
   ) {
-    console.log('controller: ', file);
     if (file) {
       const savedFile = readFileSync(join(process.cwd(), file.path), {
         encoding: 'binary',
