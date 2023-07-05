@@ -68,16 +68,20 @@ export class DocumentsService {
   ) {
     const existingDocument = await this.findOne(id);
 
-    unlinkSync(join(process.cwd(), existingDocument.file.path));
-    await this.fileRepository.delete(existingDocument.file.id);
+    console.log(file);
 
-    const newFile = await this.fileRepository.create({
-      path: file.path,
-    });
-    const savedFile = await this.fileRepository.save(newFile);
+    if (file) {
+      unlinkSync(join(process.cwd(), existingDocument.file.path));
+      await this.fileRepository.delete(existingDocument.file.id);
+
+      const newFile = await this.fileRepository.create({
+        path: file.path,
+      });
+      const savedFile = await this.fileRepository.save(newFile);
+      existingDocument.file = savedFile;
+    }
 
     existingDocument.name = updateDocumentDto.name;
-    existingDocument.file = savedFile;
 
     const updatedDocument = await this.documentRepository.save(
       existingDocument,

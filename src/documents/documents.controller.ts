@@ -77,16 +77,19 @@ export class DocumentsController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [new MaxFileSizeValidator({ maxSize: 4294967295 })],
-        fileIsRequired: true,
+        fileIsRequired: false,
       }),
     )
     file: Express.Multer.File,
   ) {
-    const savedFile = readFileSync(join(process.cwd(), file.path), {
-      encoding: 'binary',
-    });
-    if (savedFile.slice(0, 4) !== '%PDF')
-      throw new UnprocessableEntityException();
+    console.log('controller: ', file);
+    if (file) {
+      const savedFile = readFileSync(join(process.cwd(), file.path), {
+        encoding: 'binary',
+      });
+      if (savedFile.slice(0, 4) !== '%PDF')
+        throw new UnprocessableEntityException();
+    }
 
     return this.documentsService.update(+id, updateDocumentDto, file);
   }
