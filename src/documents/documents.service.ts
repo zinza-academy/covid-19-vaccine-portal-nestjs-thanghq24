@@ -91,7 +91,8 @@ export class DocumentsService {
   }
 
   async remove(id: number) {
-    await this.findOne(id);
+    const existingDocument = await this.findOne(id);
+    unlinkSync(join(process.cwd(), existingDocument.file.path));
     return this.documentRepository.delete(id);
   }
 }
