@@ -1,0 +1,17 @@
+
+//Tạo network
+docker network create vaccine-portal
+
+//Tạo và chạy volume cho mysql trong network
+docker run --name vaccine-portal-mysql -v /var/lib/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root --network vaccine-portal --network-alias vaccine-portal-mysql-db  mysql:8
+
+//Build image từ Dockerfile
+docker build -t vaccine-portal-api .
+
+//Chạy container trong network
+docker run -p 127.0.0.1:5555:5555 --network vaccine-portal --env-file=.env.docker vaccine-portal-api
+
+//Server chạy, TypeOrm không báo lỗi connect database.
+//Chạy shell trên host và workbench, table và dữ liệu có đủ.
+//Chạy shell trong container volume đã tạo, show databases, user tương tự như trên host nhưng use database rồi show tables thì hiện empty set. 
+//Gọi api từ container api đã tạo thì log lỗi Bảng "ABC" không tồn tại.
