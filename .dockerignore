@@ -16,7 +16,6 @@ lerna-debug.log*
 
 # env file
 .env
-.env*
 
 # Tests
 /coverage
@@ -41,3 +40,8 @@ lerna-debug.log*
 # files
 
 /documents
+
+# docker
+
+Dockerfile
+.dockerignore
