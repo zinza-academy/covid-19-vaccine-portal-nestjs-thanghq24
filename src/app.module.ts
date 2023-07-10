@@ -15,6 +15,7 @@ import { CaslModule } from './casl/casl.module';
 import { VaccineRegistrationResultModule } from './vaccine-registration-result/vaccine-registration-result.module';
 import { VaccineRegistrationModule } from './vaccine-registration/vaccine-registration.module';
 import { VaccineTypeModule } from './vaccine-type/vaccine-type.module';
+import { DocumentsModule } from './documents/documents.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { VaccineTypeModule } from './vaccine-type/vaccine-type.module';
     VaccineTypeModule,
     VaccineRegistrationModule,
     VaccineRegistrationResultModule,
+    DocumentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
