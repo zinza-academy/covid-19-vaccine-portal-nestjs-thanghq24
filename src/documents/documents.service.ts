@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -21,6 +25,13 @@ export class DocumentsService {
     createDocumentDto: CreateDocumentDto,
     file: Express.Multer.File,
   ) {
+    const existingDocumentWithName = await this.documentRepository.findOne({
+      where: { name: createDocumentDto.name },
+    });
+
+    if (existingDocumentWithName.name === createDocumentDto.name)
+      throw new ConflictException("This document's name has been used!");
+
     const newFile = await this.fileRepository.create({
       path: file.path,
     });
@@ -69,6 +80,13 @@ export class DocumentsService {
     updateDocumentDto: UpdateDocumentDto,
     file: Express.Multer.File,
   ) {
+    const existingDocumentWithName = await this.documentRepository.findOne({
+      where: { name: updateDocumentDto.name },
+    });
+
+    if (existingDocumentWithName.name === updateDocumentDto.name)
+      throw new ConflictException("This document's name has been used!");
+
     const existingDocument = await this.findOne(id);
 
     if (file) {
