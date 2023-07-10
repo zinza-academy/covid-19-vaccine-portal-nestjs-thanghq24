@@ -7,6 +7,12 @@ export class File {
   id: number;
 
   @Column()
+  originalName: string;
+
+  @Column()
+  fileName: string;
+
+  @Column()
   path: string;
 
   @OneToOne(() => Document, (document) => document.file, {

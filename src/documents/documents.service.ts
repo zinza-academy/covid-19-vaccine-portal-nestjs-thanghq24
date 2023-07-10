@@ -29,11 +29,13 @@ export class DocumentsService {
       where: { name: createDocumentDto.name },
     });
 
-    if (existingDocumentWithName.name === createDocumentDto.name)
+    if (existingDocumentWithName)
       throw new ConflictException("This document's name has been used!");
 
     const newFile = await this.fileRepository.create({
       path: file.path,
+      fileName: file.filename,
+      originalName: file.originalname,
     });
 
     const savedFile = await this.fileRepository.save(newFile);
@@ -84,7 +86,7 @@ export class DocumentsService {
       where: { name: updateDocumentDto.name },
     });
 
-    if (existingDocumentWithName.name === updateDocumentDto.name)
+    if (existingDocumentWithName)
       throw new ConflictException("This document's name has been used!");
 
     const existingDocument = await this.findOne(id);
@@ -95,7 +97,10 @@ export class DocumentsService {
 
       const newFile = await this.fileRepository.create({
         path: file.path,
+        fileName: file.filename,
+        originalName: file.originalname,
       });
+
       const savedFile = await this.fileRepository.save(newFile);
       existingDocument.file = savedFile;
     }

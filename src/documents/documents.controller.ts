@@ -10,7 +10,6 @@ import {
   UploadedFile,
   UnprocessableEntityException,
   ParseFilePipe,
-  MaxFileSizeValidator,
   StreamableFile,
   Res,
 } from '@nestjs/common';
@@ -26,6 +25,7 @@ import { Public } from 'src/auth/decorator/public-route.decorator';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { Response } from 'express';
+import { multerOptions } from './storageOptions';
 
 @Controller('documents')
 export class DocumentsController {
@@ -33,12 +33,11 @@ export class DocumentsController {
 
   @AllowedRoles(Roles.Admin)
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', multerOptions))
   create(
     @Body() createDocumentDto: CreateDocumentDto,
     @UploadedFile(
       new ParseFilePipe({
-        validators: [new MaxFileSizeValidator({ maxSize: 4294967295 })],
         fileIsRequired: true,
       }),
     )
@@ -82,14 +81,13 @@ export class DocumentsController {
   }
 
   @AllowedRoles(Roles.Admin)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', multerOptions))
   @Patch(':id')
   update(
     @Param('id') id: string,
     @Body() updateDocumentDto: UpdateDocumentDto,
     @UploadedFile(
       new ParseFilePipe({
-        validators: [new MaxFileSizeValidator({ maxSize: 4294967295 })],
         fileIsRequired: false,
       }),
     )
