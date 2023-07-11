@@ -2,15 +2,12 @@ version: '3.4'
 
 services:
   api:
-    build:
-      dockerfile: Dockerfile
-      context: .
-      target: development
-    volumes:
-      - .:/usr/src/app
+    user: root
+    container_name: vaccine-portal-api
+    build: .
     env_file:
       - .env.docker
-    command: npm run start:dev
+    # command: npm run start
     ports:
       - 5556:5556
     depends_on:
