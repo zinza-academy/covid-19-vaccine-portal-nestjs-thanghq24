@@ -76,30 +76,23 @@ export class UsersService {
     const existingUser = await this.userRepository.findOneBy({
       email: updateUserDto.email,
     });
-    if (existingUser)
-      throw new ConflictException('This email is already used!');
 
     const updateUser = await this.findOne(id);
-    if (!updateUser) throw new NotFoundException('User not found!');
 
-    const roleIds = await Promise.all(
-      updateUserDto.roles.map(async (roleId) => {
-        if (await this.roleRepository.exist({ where: { id: roleId } }))
-          return {
-            id: roleId,
-          };
-        else throw new NotFoundException(`Role with id ${roleId} not found!`);
-      }),
-    );
+    if (
+      existingUser.email === updateUserDto.email &&
+      updateUser.email !== updateUserDto.email
+    )
+      throw new ConflictException('This email is already used!');
 
     const toUpdateUser = {
-      id: updateUser.id,
       ...updateUserDto,
       ward: { id: updateUserDto.ward },
-      roles: roleIds,
     };
-    const updatedUser = await this.userRepository.save(toUpdateUser);
-    return updatedUser;
+
+    await this.userRepository.update(id, toUpdateUser);
+
+    return this.findOne(id);
   }
 
   async updatePassword(id: number, newPassword: string) {
@@ -108,13 +101,15 @@ export class UsersService {
 
     updateUser.password = newPassword;
 
-    const updatedUser = await this.userRepository.save(updateUser);
-    return updatedUser;
+    await this.userRepository.save(updateUser);
+
+    return this.findOne(id);
   }
 
   async remove(id: number) {
     const deleteUser = await this.findOne(id);
     if (!deleteUser) throw new NotFoundException('User not found!');
-    this.userRepository.delete({ id: id });
+
+    await this.userRepository.delete({ id: id });
   }
 }
