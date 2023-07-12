@@ -14,7 +14,15 @@ export default new DataSource({
   username: configService.get('DATABASE_USER'),
   password: configService.get('DATABASE_PASSWORD'),
   database: configService.get('DATABASE_NAME'),
-  entities: ['src/entities/*.entity{.ts,.js}'],
-  migrations: ['migrations/*{.ts,.js}'],
+  entities: [
+    configService.get('NODE_ENV') === 'production'
+      ? 'dist/src/entities/*.entity.js'
+      : 'src/entities/*.entity{.ts,.js}',
+  ],
+  migrations: [
+    configService.get('NODE_ENV') === 'production'
+      ? 'dist/migrations/*.js'
+      : 'migrations/*{.ts,.js}',
+  ],
   namingStrategy: new SnakeNamingStrategy(),
 });
