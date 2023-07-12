@@ -20,3 +20,7 @@ services:
       MYSQL_DATABASE: vaccine_portal
       MYSQL_USER: thanghq
       MYSQL_PASSWORD: M@tkh@u1999
+    volumes:
+      - mysql-vaccine-portal-volume:/var/lib/mysql
+volumes:
+  mysql-vaccine-portal-volume:
