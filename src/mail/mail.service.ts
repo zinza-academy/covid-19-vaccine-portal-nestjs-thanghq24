@@ -1,12 +1,14 @@
 import { ConfigService } from '@nestjs/config';
-import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
+import { MailDataType } from './types';
 
 @Injectable()
 export class MailService {
   constructor(
     private configService: ConfigService,
-    private mailerService: MailerService,
+    @InjectQueue('mail-queue') private mailQueue: Queue<MailDataType>,
   ) {}
 
   async sendForgotPasswordEmail(toEmail: string, token: string) {
@@ -15,12 +17,9 @@ export class MailService {
         'CORS_ORIGIN',
       )}/reset-password/${token}`;
 
-      await this.mailerService.sendMail({
-        to: toEmail,
-        from: '"Support Team" <support@vaccineportal.com>',
-        subject: 'Reset password request',
-        template: './forgot-password',
-        context: { url: url },
+      this.mailQueue.add('mail-sending', {
+        toEmail: toEmail,
+        url: url,
       });
     } catch (error) {
       throw new InternalServerErrorException({
