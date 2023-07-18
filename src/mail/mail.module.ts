@@ -17,6 +17,7 @@ import { MailProcessor } from './mail.processor';
         redis: {
           host: configService.get('REDIS_QUEUE_HOST'),
           port: +configService.get('REDIS_QUEUE_PORT'),
+          password: configService.get('REDIS_QUEUE_PASSWORD'),
         },
         defaultJobOptions: {
           attempts: 10,
