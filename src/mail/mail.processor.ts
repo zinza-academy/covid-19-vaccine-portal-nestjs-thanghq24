@@ -9,16 +9,12 @@ export class MailProcessor {
 
   @Process('mail-sending')
   handleSendMail(job: Job<MailDataType>) {
-    try {
-      this.mailerService.sendMail({
-        to: job.data.toEmail,
-        from: '"Support Team" <support@vaccineportal.com>',
-        subject: 'Reset password request',
-        template: './forgot-password',
-        context: { url: job.data.url },
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    this.mailerService.sendMail({
+      to: job.data.toEmail,
+      from: '"Support Team" <support@vaccineportal.com>',
+      subject: 'Reset password request',
+      template: './forgot-password',
+      context: { url: job.data.url },
+    });
   }
 }
