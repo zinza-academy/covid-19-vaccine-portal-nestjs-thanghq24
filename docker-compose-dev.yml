@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  api:
+    container_name: vaccine-portal-api-dev
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env.docker.dev
+    command: npm run start:dev
+    ports:
+      - 5556:5556
+    depends_on:
+      - mysql-db-dev
+  mysql-db-dev:
+    container_name: mysql-db-dev
+    image: mysql:8.0.33
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: vaccine_portal
+      MYSQL_USER: thanghq
+      MYSQL_PASSWORD: M@tkh@u1999
+    volumes:
+      - mysql-vaccine-portal-volume-dev:/var/lib/mysql
+volumes:
+  mysql-vaccine-portal-volume-dev:

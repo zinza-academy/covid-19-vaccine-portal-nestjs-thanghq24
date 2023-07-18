@@ -21,6 +21,7 @@ import { CaslAbilityFactory } from 'src/casl/casl-ability.factory/casl-ability.f
 import { Action } from 'src/casl/Action';
 import { User } from 'src/entities/user.entity';
 import { GetUserFromJwtPayload } from 'src/auth/decorator/get-user-payload.decorator';
+import { ChangePasswordDto } from './dto/edit-password.dto';
 
 @Controller('users')
 export class UsersController {
@@ -72,11 +73,33 @@ export class UsersController {
     const existingUser = await this.usersService.findOne(id);
     const ability = this.caslAbilityFactory.createForUser(user);
 
-    if (!ability.can(Action.Read, existingUser)) {
+    if (!ability.can(Action.Update, existingUser)) {
       throw new ForbiddenException('You cannot modify other account details!');
     }
 
     const updatedUser = await this.usersService.update(id, updateUserDto);
+
+    return updatedUser;
+  }
+
+  @AllowedRoles(Roles.Admin, Roles.User)
+  @Patch('edit-password/:id')
+  async editPassword(
+    @GetUserFromJwtPayload('user') user: User,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    const existingUser = await this.usersService.findOne(id);
+    const ability = this.caslAbilityFactory.createForUser(user);
+
+    if (!ability.can(Action.Update, existingUser)) {
+      throw new ForbiddenException('You cannot modify other account details!');
+    }
+
+    const updatedUser = await this.usersService.updatePassword(
+      id,
+      changePasswordDto.password,
+    );
 
     return updatedUser;
   }

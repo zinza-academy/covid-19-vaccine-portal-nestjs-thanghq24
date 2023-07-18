@@ -16,6 +16,7 @@ import { VaccineRegistrationResultModule } from './vaccine-registration-result/v
 import { VaccineRegistrationModule } from './vaccine-registration/vaccine-registration.module';
 import { VaccineTypeModule } from './vaccine-type/vaccine-type.module';
 import { DocumentsModule } from './documents/documents.module';
+import { SeedingModule } from './seeding/seeding.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { DocumentsModule } from './documents/documents.module';
     VaccineRegistrationModule,
     VaccineRegistrationResultModule,
     DocumentsModule,
+    SeedingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -22,7 +22,7 @@ export class AuthController {
     res.cookie('access_token', loginResult.accessToken, {
       maxAge: 60 * 30 * 1000,
       // httpOnly: true,
-      secure: true,
+      // secure: true,
     });
 
     return loginResult;
