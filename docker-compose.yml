@@ -6,7 +6,7 @@ services:
     container_name: vaccine-portal-api
     build: .
     env_file:
-      - .env.docker
+      - .env
     ports:
       - 5556:5556
     depends_on:
@@ -27,8 +27,6 @@ services:
     container_name: redis-db
     image: redis/redis-stack-server:latest
     restart: always
-    ports:
-      - '6378:6378'
     command: redis-server --save 20 1 --requirepass ${REDIS_QUEUE_PASSWORD}
     volumes:
       - redis-volume:/data

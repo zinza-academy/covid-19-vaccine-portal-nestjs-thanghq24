@@ -32,8 +32,6 @@ services:
     container_name: redis-db
     image: redis/redis-stack-server:latest
     restart: always
-    ports:
-      - '6379:6379'
     command: redis-server --save 20 1 --requirepass ${REDIS_QUEUE_PASSWORD}
     volumes:
       - redis-volume-dev:/data
