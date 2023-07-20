@@ -22,10 +22,10 @@ services:
     image: mysql:8.0.33
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: vaccine_portal
-      MYSQL_USER: thanghq
-      MYSQL_PASSWORD: M@tkh@u1999
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
       - mysql-vaccine-portal-volume-dev:/var/lib/mysql
   redis-db-dev:
@@ -33,8 +33,8 @@ services:
     image: redis/redis-stack-server:latest
     restart: always
     ports:
-      - '6378:6378'
-    command: redis-server --save 20 1 --requirepass FhmEsaLAWMSR77chj4aJ
+      - '6379:6379'
+    command: redis-server --save 20 1 --requirepass ${REDIS_QUEUE_PASSWORD}
     volumes:
       - redis-volume-dev:/data
 volumes:
