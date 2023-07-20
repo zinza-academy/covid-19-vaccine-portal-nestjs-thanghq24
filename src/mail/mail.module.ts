@@ -3,11 +3,28 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { Global, Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { join } from 'path';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { BullModule } from '@nestjs/bull';
+import { MailProcessor } from './mail.processor';
 
 @Global()
 @Module({
   imports: [
+    BullModule.registerQueueAsync({
+      name: 'mail-queue',
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('REDIS_QUEUE_HOST'),
+          port: +configService.get('REDIS_QUEUE_PORT'),
+          password: configService.get('REDIS_QUEUE_PASSWORD'),
+        },
+        defaultJobOptions: {
+          attempts: 10,
+        },
+      }),
+      inject: [ConfigService],
+    }),
     MailerModule.forRootAsync({
       useFactory: async (config: ConfigService) => ({
         transport: {
@@ -31,7 +48,7 @@ import { ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
   ],
-  providers: [MailService],
+  providers: [MailService, MailProcessor],
   exports: [MailService],
 })
 export class MailModule {}

@@ -40,7 +40,7 @@ export class SeedingService {
         },
       ],
       email: 'thang.hq@zinza.com.vn',
-      password: '2a$10$ihd3u9PFhX6jAlR5EHSV9OHuCfiT/PUsWlnQ/jlB65wYfiKLVpVE6',
+      password: '$2a$10$Od0BiNPQxPxLoAn13ehj/ehvQxAkMO5pXFGSaoRIYkLX97i8Zo1IW',
       healthInsuranceNumber: 'HD4429830333838',
       dob: '1996-06-12',
       gender: 'M',
